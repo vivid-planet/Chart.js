@@ -39,6 +39,12 @@ module.exports = {
 		 * @type Number
 		 * @optional
 		 */
+		/**
+		 * If true and tick spacing is auto generated, the spacing will be an integer.
+		 * @name INumericTickGenerationOptions#integerSteps
+		 * @type Boolean
+		 * @optional
+		 */
 
 		/**
 		 * Generate a set of linear ticks
@@ -59,6 +65,11 @@ module.exports = {
 			} else {
 				var niceRange = helpers.niceNum(dataRange.max - dataRange.min, false);
 				spacing = helpers.niceNum(niceRange / (generationOptions.maxTicks - 1), true);
+
+				if (generationOptions.integerSteps && spacing !== Math.round(spacing)) {
+					// If forcing integer steps, and our step is not an integer, scale up
+					spacing = Math.ceil(spacing);
+				}
 			}
 			var niceMin = Math.floor(dataRange.min / spacing) * spacing;
 			var niceMax = Math.ceil(dataRange.max / spacing) * spacing;
